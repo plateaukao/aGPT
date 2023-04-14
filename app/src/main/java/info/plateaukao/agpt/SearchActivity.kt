@@ -9,6 +9,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -45,9 +46,15 @@ class SearchActivity : AppCompatActivity() {
                             .fillMaxSize()
                             .border(BorderStroke(1.dp, Color.Black)),
                     ) {
-                        Text(text = requestMessage)
+                        Text(
+                            text = requestMessage,
+                            modifier = Modifier.padding(8.dp)
+                        )
                         Divider()
-                        Text(text = responseMessage)
+                        Text(
+                            text = responseMessage,
+                            modifier = Modifier.padding(8.dp)
+                        )
                     }
                 }
             }

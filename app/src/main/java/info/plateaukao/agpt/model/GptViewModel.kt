@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 
 class GptViewModel : ViewModel() {
-    private val openai: OpenAI = OpenAI(Prefs.getString("apiKey", ""))
+    private val openai: OpenAI by lazy { OpenAI(Prefs.getString("apiKey", "")) }
 
     private val _responseMessage = MutableStateFlow("")
     val responseMessage: StateFlow<String> = _responseMessage.asStateFlow()
