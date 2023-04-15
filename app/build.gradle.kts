@@ -66,8 +66,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
 
     // openai library
-    implementation("com.squareup.okhttp3:okhttp:3.12.2")
-    implementation("com.cjcrafter:openai:1.3.0")
+    implementation("com.aallam.openai:openai-client:3.2.0")
+    implementation("io.ktor:ktor-client-android:2.2.4")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)

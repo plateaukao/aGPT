@@ -1,12 +1,13 @@
 package info.plateaukao.agpt.model
 
-import android.content.ContextWrapper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cjcrafter.openai.OpenAI
-import com.cjcrafter.openai.chat.ChatMessage.Companion.toSystemMessage
-import com.cjcrafter.openai.chat.ChatMessage.Companion.toUserMessage
-import com.cjcrafter.openai.chat.ChatRequest
+import com.aallam.openai.api.BetaOpenAI
+import com.aallam.openai.api.chat.ChatCompletionRequest
+import com.aallam.openai.api.chat.ChatMessage
+import com.aallam.openai.api.chat.ChatRole
+import com.aallam.openai.api.model.ModelId
+import com.aallam.openai.client.OpenAI
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
+@OptIn(BetaOpenAI::class)
 class GptViewModel : ViewModel() {
     private val openai: OpenAI by lazy { OpenAI(Prefs.getString("apiKey", "")) }
 
@@ -33,13 +35,26 @@ class GptViewModel : ViewModel() {
             add("Translate following content into Traditional Chinese: $userMessage".toUserMessage())
         }
 
-        val request = ChatRequest.builder()
-            .model("gpt-3.5-turbo")
-            .messages(messages).build()
+        val chatCompletionRequest = ChatCompletionRequest(
+            model = ModelId("gpt-3.5-turbo"),
+            messages = messages
+        )
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = openai.createChatCompletion(request)
-            _responseMessage.value = response.choices.first().message.content
+            val response = openai.chatCompletion(chatCompletionRequest)
+            _responseMessage.value = response.choices.first().message?.content ?: ""
         }
     }
 }
+
+@OptIn(BetaOpenAI::class)
+fun String.toUserMessage() = ChatMessage(
+    role = ChatRole.User,
+    content = this
+)
+
+@OptIn(BetaOpenAI::class)
+fun String.toSystemMessage() = ChatMessage(
+    role = ChatRole.System,
+    content = this
+)
